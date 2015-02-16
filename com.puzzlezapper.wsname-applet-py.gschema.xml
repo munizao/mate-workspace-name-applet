@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="com.puzzleapper.wsname-applet-py" path="/com/puzzlezapper/wsname-applet-py/">
+    <key type="i" name="width">
+      <range min="30" max="500"/>
+      <default>100</default>
+      <summary>Applet width</summary>
+      <description>Applet width, in pixels.</description>
+    </key>
+  </schema>
+</schemalist>

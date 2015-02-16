@@ -1,0 +1,40 @@
+2013-01-19  Alexandre Muñiz  <munizao@newraven>
+
+	* wsname_applet.py: Added the ability to run the applet in a stand alone window for debugging purposes. Converted to MATE.
+
+	* configure.in Bumped version to 0.9.2
+
+2009-04-03  Alexandre Owen Muniz  <munizao@xprt.net>
+
+        * Makefile.am: added po/POTFILES.in to EXTRA_DIST
+
+        * configure.in: bumped version to 0.9.1. Previous version was bugfree; this one also builds.
+
+2008-07-14  Alexandre Owen Muniz  <munizao@localhost.localdomain>
+
+	* wsname_applet.py: Added a fixed width mode, and a preferences dialog to configure the width. Made pressing the escape key cancel out of editing the name. Fixed menu to use accelerators and stock icons.
+
+	* configure.in: bumped version to 0.9.0, since it is perfectly bug free and should therefore be ready for beta now.
+
+2008-07-06  Alexandre Owen Muniz  <munizao@localhost.localdomain>
+
+	* wsname_applet.py(WSNameApplet._onToggled): Select text in entry when displaying it.
+
+	* configure.in: added AM_PO_SUBDIRS, bumped version to 0.2.0
+
+2007-07-28  Alexandre Owen Muniz  <munizao@xprt.net>
+
+	* wsname_applet.py(WSNameEntryWindow): Move workspace name changing from entry changed signal to activate signal, which fixes nastiness where the entry would briefly be blank, causing the previous workspace name to be lost.
+
+	* configure.in: bumped version to 0.1.0, on account of the fix making the applet usable.
+
+2006-07-28  Alexandre Owen Muniz  <munizao@xprt.net>
+
+	* MATE_WorkspaceNameApplet.server.in.in, Makefile.am, wsnamelet.png: added icon.
+
+	* wsname_applet.py (WSNameEntryWindow._onActivate): Toggle button (and hide entry window) when enter is pressed.
+	(WSNameApplet._onToggled): disable tooltips while entry is shown (because the tooltip ends up obscuring the entry, which is annoying.)
+
+2006-07-08  Alexandre Owen Muniz  <munizao@xprt.net>
+
+	* Added ChangeLog.

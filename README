@@ -1,0 +1,4 @@
+Workspace Name Applet
+---------------------
+
+This is a Gnome panel applet written in python that displays the name of the current workspace, and allows you to change it.

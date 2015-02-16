@@ -1,0 +1,2 @@
+autoscan: warning: missing AC_PROG_CXX wanted by: 
+	autogen.sh:86

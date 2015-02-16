@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=org.mate.panel.applet.WsnameAppletFactory
+Exec=@LOCATION@/wsname_applet.py

@@ -1,0 +1,12 @@
+[Applet Factory]
+Id=WsnameAppletFactory
+InProcess=false
+Location=@LOCATION@/wsname_applet.py
+Name=Workspace Name Applet Factory
+Description=Workspace Name
+     
+[WsnameApplet]
+Name=Workspace Name
+Description=Display and change the name of the current workspace
+Icon=@ICONSDIR@/wsnamelet.png
+MateComponentId=OAFIID:MATE_WsnameApplet;
