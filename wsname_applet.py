@@ -1,12 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #Uncomment to debug. If you aren't me, I bet you want to change the paths, too.
-#import os
 import sys
-sys.stdout = open ("/home/munizao/hacks/googlesvn/wsnamelet/debug.stdout", "w", 0)
-sys.stderr = open ("/home/munizao/hacks/googlesvn/wsnamelet/debug.stderr", "w", 0)
-
-print "got anything"
+#sys.stdout = open ("/home/munizao/hacks/googlesvn/wsnamelet/debug.stdout", "w", 0)
+#sys.stderr = open ("/home/munizao/hacks/googlesvn/wsnamelet/debug.stderr", "w", 0)
 
 import gi
 gi.require_version("Gtk", "2.0")
@@ -15,7 +12,6 @@ from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Pango
 from gi.repository import MatePanelApplet
-#gi.module.gi.require_version ("Wnck", "1.0")
 gi.require_version ("Wnck", "1.0")
 from gi.repository import Wnck
 from gi.repository import Gio
@@ -23,9 +19,6 @@ from gi.repository import Gio
 from wsnamelet import wsnamelet_globals
 
  
-print "got past imports"
-
-
 #Internationalize
 import locale
 import gettext
@@ -80,13 +73,9 @@ class WSNameApplet(MatePanelApplet.Applet):
     settings = None
     prefs = None
     width = 100
-    #auto_resize = False    
     editing = False
-
-
     
     def __init__(self, applet):
-        print "Applet init"
         self.applet = applet;
         menuxml = """
         <menuitem name="Prefs" action="Prefs" />
@@ -102,12 +91,8 @@ class WSNameApplet(MatePanelApplet.Applet):
         applet.setup_menu(menuxml, actiongroup)
         print "menu is setup"
         self.init()
-        #self.__gobject_init__()
-
-
 
     def _display_about(self, action):
-        print "_display_about"
         about = Gtk.AboutDialog()
         about.set_program_name("Workspace Name Applet")
         about.set_version(wsnamelet_globals.version)
@@ -121,7 +106,6 @@ class WSNameApplet(MatePanelApplet.Applet):
         self.prefs.dialog.run()
         self.prefs.dialog.hide()
         
-
     def set_width(self, width):
         self.width = width
         self.button.set_size_request(width, -1)
@@ -134,7 +118,6 @@ class WSNameApplet(MatePanelApplet.Applet):
         self.set_width(width)
 
     def init(self):
-        print "init"
         self.button = Gtk.Button()
         self.button.connect("button-press-event", self._on_button_press)
         self.button.connect("button-release-event", self._on_button_release)
@@ -149,28 +132,19 @@ class WSNameApplet(MatePanelApplet.Applet):
             self.set_width(self.settings.get_int("width"))
             self.settings.connect("changed::width", self.on_width_changed)
         except:
-            print "Settings failed"
             self.set_width(100)
-	print "we have settings"
-
-
 	self.screen = Wnck.Screen.get_default()
         self.workspace = really_get_active_workspace(self.screen)
 	self.screen.connect("active_workspace_changed", self._on_workspace_changed)
-
 	self._name_change_handler_id = None
-
         self.tooltips = Gtk.Tooltips()
         self.tooltips.set_tip(self.button, _("Click to change the name of the current workspace"))
-
         self.prefs = WSNamePrefs(self)
         self.show_workspace_name()
         self.applet.show_all()
-
 	return True	    
 
     def _on_button_press(self, button, event, data=None):
-        print "got clicked"
         print event.button
         if event.button != 1:
             button.stop_emission("button-press-event")
@@ -203,7 +177,6 @@ class WSNameApplet(MatePanelApplet.Applet):
 	self.show_workspace_name()
 
     def show_workspace_name(self):
-        print "got to show_workspace_name"
         if self.workspace:
             self.label.set_text(self.workspace.get_name())
 	self.applet.show_all()
@@ -230,4 +203,3 @@ MatePanelApplet.Applet.factory_main("WsnameAppletFactory",
                                     MatePanelApplet.Applet.__gtype__,
                                     applet_factory, 
                                     None)
-
