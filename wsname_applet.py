@@ -32,7 +32,6 @@ gettext.install('wsnamelet', '/usr/share/locale', unicode=1)
 
 class WSNamePrefs(object):    
     def __init__(self, applet):
-        print "got to prefs"
         self.applet = applet
         self.dialog = Gtk.Dialog("Workspace Name Applet Preferences",
                                  None,
@@ -87,9 +86,7 @@ class WSNameApplet(MatePanelApplet.Applet):
                    ("About", Gtk.STOCK_ABOUT, "About", None, None, self._display_about)]
         actiongroup = Gtk.ActionGroup.new("WsnameActions")
         actiongroup.add_actions(actions, None)
-        print "actions added"
         applet.setup_menu(menuxml, actiongroup)
-        print "menu is setup"
         self.init()
 
     def _display_about(self, action):
@@ -145,7 +142,6 @@ class WSNameApplet(MatePanelApplet.Applet):
 	return True	    
 
     def _on_button_press(self, button, event, data=None):
-        print event.button
         if event.button != 1:
             button.stop_emission("button-press-event")
 
@@ -194,7 +190,6 @@ def really_get_active_workspace(screen):
     return screen.get_active_workspace()
 
 def applet_factory(applet, iid, data):
-    print "got to factory"
     WSNameApplet(applet)
     return True
 
