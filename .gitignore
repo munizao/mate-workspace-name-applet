@@ -1,7 +1,12 @@
+/com.puzzlezapper.wsname-applet-py.gschema.valid
+/org.mate.panel.applet.WsnameAppletFactory.service
+/org.mate.panel.WsnameApplet.mate-panel-applet
 /org.mate.panel.WsnameApplet.mate-panel-applet.in
+/wsnamelet_globals.py
 
 # http://www.gnu.org/software/automake
 
+Makefile
 Makefile.in
 
 # http://www.gnu.org/software/autoconf
@@ -14,3 +19,5 @@ Makefile.in
 /install-sh
 /missing
 /stamp-h1
+/config.log
+/config.status
