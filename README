@@ -1,4 +1,21 @@
 Workspace Name Applet
 ---------------------
 
-This is a Gnome panel applet written in python that displays the name of the current workspace, and allows you to change it.
+This is a Mate panel applet that displays the name of the current workspace, and allows you to change it. To do so, click on the applet, type the new name, and press Enter.
+
+To install the applet:
+
+1. Install the libraries that it needs. This will depend on your distribution. In Linux Mint 17 (Qiana), you can try installing the following:
+
+gir1.2-wnck-1.0
+gir1.2-mate-panel
+
+Hopefully that will be enough to pull in all required dependencies.
+
+2. Install the applet using the following commands:
+
+./autogen.sh --prefix=/usr
+make
+sudo make install
+
+Known issue: middle click/drag does not work to move the applet. The workaround for this is to press Shift while dragging another applet to push it into place. 
