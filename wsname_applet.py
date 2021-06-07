@@ -1,32 +1,35 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #Uncomment to debug. If you aren't me, I bet you want to change the paths, too.
 import sys
-#sys.stdout = open ("/home/munizao/hacks/googlesvn/wsnamelet/debug.stdout", "w", 0)
-#sys.stderr = open ("/home/munizao/hacks/googlesvn/wsnamelet/debug.stderr", "w", 0)
+from wsnamelet import wsnamelet_globals
+if wsnamelet_globals.debug:
+    sys.stdout = open ("/home/munizao/hacks/wsnamelet/debug.stdout", "w", buffering=1)
+    sys.stderr = open ("/home/munizao/hacks/wsnamelet/debug.stderr", "w", buffering=1)
 
 import gi
-gi.require_version("Gtk", "2.0")
+gi.require_version("Gtk", "3.0")
+gi.require_version("MatePanelApplet", "4.0")
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Pango
 from gi.repository import MatePanelApplet
-gi.require_version ("Wnck", "1.0")
+gi.require_version ("Wnck", "3.0")
 from gi.repository import Wnck
 from gi.repository import Gio
 
-from wsnamelet import wsnamelet_globals
+
 
  
 #Internationalize
 import locale
 import gettext
-gettext.bindtextdomain('wsnamelet', '/usr/share/locale')
+gettext.bindtextdomain('wsnamelet', wsnamelet_globals.localedir)
 gettext.textdomain('wsnamelet')
-locale.bindtextdomain('wsnamelet', '/usr/share/locale')
+locale.bindtextdomain('wsnamelet', wsnamelet_globals.localedir)
 locale.textdomain('wsnamelet')
-gettext.install('wsnamelet', '/usr/share/locale', unicode=1)
+gettext.install('wsnamelet', wsnamelet_globals.localedir)
 
 #screen = None
 
@@ -95,7 +98,8 @@ class WSNameApplet(MatePanelApplet.Applet):
         about.set_version(wsnamelet_globals.version)
         about.set_copyright("© 2006 - 2015 Alexandre Muñiz")
         about.set_comments("View and change the name of the current workspace.\n\nTo change the workspace name, click on the applet, type the new name, and press Enter.")
-	about.connect ("response", lambda self, *args: self.destroy ())
+        about.set_website("https://github.com/munizao/mate-workspace-name-applet")
+        about.connect ("response", lambda self, *args: self.destroy ())
         about.show_all()
 
     def _display_prefs(self, action):
@@ -118,10 +122,10 @@ class WSNameApplet(MatePanelApplet.Applet):
         self.button = Gtk.Button()
         self.button.connect("button-press-event", self._on_button_press)
         self.button.connect("button-release-event", self._on_button_release)
-	self.label = Gtk.Label()
+        self.label = Gtk.Label()
         self.label.set_ellipsize(Pango.EllipsizeMode.END)
-	self.applet.add(self.button)
-	self.button.add(self.label)
+        self.applet.add(self.button)
+        self.button.add(self.label)
         self.entry = WSNameEntry(self)
         self.entry.connect("button-press-event", self._on_entry_button_press)
         try:
@@ -130,16 +134,15 @@ class WSNameApplet(MatePanelApplet.Applet):
             self.settings.connect("changed::width", self.on_width_changed)
         except:
             self.set_width(100)
-	self.screen = Wnck.Screen.get_default()
+        self.screen = Wnck.Screen.get_default()
         self.workspace = really_get_active_workspace(self.screen)
-	self.screen.connect("active_workspace_changed", self._on_workspace_changed)
-	self._name_change_handler_id = None
-        self.tooltips = Gtk.Tooltips()
-        self.tooltips.set_tip(self.button, _("Click to change the name of the current workspace"))
+        self.screen.connect("active_workspace_changed", self._on_workspace_changed)
+        self.button.set_tooltip_text(_("Click to change the name of the current workspace"))
+        self._name_change_handler_id = None
         self.prefs = WSNamePrefs(self)
         self.show_workspace_name()
         self.applet.show_all()
-	return True	    
+        return True	    
 
     def _on_button_press(self, button, event, data=None):
         if event.button != 1:
@@ -163,19 +166,19 @@ class WSNameApplet(MatePanelApplet.Applet):
     def _on_workspace_changed(self, event, old_workspace):
         if self.editing:
             self.exit_editing()
-	if (self._name_change_handler_id):
-	    self.workspace.disconnect(self._name_change_handler_id)
-        self.workspace = really_get_active_workspace(self.screen)
-	self._name_change_handler_id = self.workspace.connect("name-changed", self._on_workspace_name_changed)
+        if (self._name_change_handler_id):
+            self.workspace.disconnect(self._name_change_handler_id)
+            self.workspace = really_get_active_workspace(self.screen)
+        self._name_change_handler_id = self.workspace.connect("name-changed", self._on_workspace_name_changed)
         self.show_workspace_name()
 
     def _on_workspace_name_changed(self, event):
-	self.show_workspace_name()
+	    self.show_workspace_name()
 
     def show_workspace_name(self):
         if self.workspace:
             self.label.set_text(self.workspace.get_name())
-	self.applet.show_all()
+        self.applet.show_all()
 
     def exit_editing(self):
         self.editing = False

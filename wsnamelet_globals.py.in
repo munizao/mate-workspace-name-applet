@@ -1,4 +1,5 @@
+debug = False
 name = "wsnamelet"
 version = "@VERSION@"
 image_dir = "@prefix@/share/pixmaps"
-localedir = "@prefix@/@DATADIRNAME@/locale"
+localedir = "@prefix@/share/locale"
