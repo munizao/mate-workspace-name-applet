@@ -3,9 +3,12 @@
 /org.mate.panel.WsnameApplet.mate-panel-applet
 /org.mate.panel.WsnameApplet.mate-panel-applet.in
 /wsnamelet_globals.py
+/debug.stderr
+/debug.stdout
 
 # http://www.gnu.org/software/automake
 
+po/Makefile
 Makefile
 Makefile.in
 
