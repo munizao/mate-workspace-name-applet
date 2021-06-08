@@ -5,6 +5,7 @@
 /wsnamelet_globals.py
 /debug.stderr
 /debug.stdout
+/__pycache__
 
 # http://www.gnu.org/software/automake
 
