@@ -1,4 +1,4 @@
-AC_INIT([wsnamelet], [0.9.3])
+AC_INIT([wsnamelet], [0.9.4])
 AC_CONFIG_SRCDIR([wsname_applet.py])
 AM_INIT_AUTOMAKE
 
@@ -6,7 +6,7 @@ AM_MAINTAINER_MODE
 AC_PROG_INTLTOOL([0.21])
 
 dnl check for python
-AM_PATH_PYTHON
+AM_PATH_PYTHON([3.5])
 
 m4_pattern_allow([AM_V_GEN])dnl Make autoconf not complain about the rule below
 PANEL_INTLTOOL_MATE_PANEL_APPLET_RULE='%.mate-panel-applet: %.mate-panel-applet.in $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; $(AM_V_GEN) LC_ALL=C $(INTLTOOL_MERGE) -d -u -c $(top_builddir)/po/.intltool-merge-cache $(top_srcdir)/po $< [$]@'
