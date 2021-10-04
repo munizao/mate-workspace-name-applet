@@ -12,6 +12,7 @@ gi.require_version("Gtk", "3.0")
 gi.require_version("MatePanelApplet", "4.0")
 from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Pango
 from gi.repository import MatePanelApplet
@@ -38,11 +39,11 @@ class WSNamePrefs(object):
         self.applet = applet
         self.dialog = Gtk.Dialog("Workspace Name Applet Preferences",
                                  None,
-                                 Gtk.DialogFlags.DESTROY_WITH_PARENT,
-                                 (Gtk.STOCK_CLOSE, Gtk.ResponseType.CLOSE))
+                                 destroy_with_parent = True)
+        self.dialog.add_button(Gtk.STOCK_CLOSE, Gtk.ResponseType.CLOSE)
         self.dialog.set_border_width(10)
         width_spin_label = Gtk.Label(label=_("Applet width in pixels:"))
-        width_adj = Gtk.Adjustment(lower=30, upper=500, step_incr=1)
+        width_adj = Gtk.Adjustment(lower=30, upper=500, step_increment=1)
         self.width_spin_button = Gtk.SpinButton.new(width_adj, 0.0, 0)
         self.applet.settings.bind("width", self.width_spin_button, "value", Gio.SettingsBindFlags.DEFAULT)
         width_spin_hbox = Gtk.HBox()
@@ -56,6 +57,7 @@ class WSNameEntry(Gtk.Entry):
         Gtk.Widget.__init__(self)
         self.connect("activate", self._on_activate)
         self.connect("key-release-event", self._on_key_release)
+        self.connect("focus-out-event", self._on_focus_out)
         self.applet = applet
 
     def _on_activate(self, event):
@@ -66,6 +68,10 @@ class WSNameEntry(Gtk.Entry):
 
     def _on_key_release(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
+            self.applet.exit_editing()
+    
+    def _on_focus_out(self, widget, event):
+        if self.applet.editing:
             self.applet.exit_editing()
 
 
@@ -78,7 +84,7 @@ class WSNameApplet(MatePanelApplet.Applet):
     editing = False
     
     def __init__(self, applet):
-        self.applet = applet;
+        self.applet = applet
         menuxml = """
         <menuitem name="Prefs" action="Prefs" />
         <menuitem name="About" action="About" />
@@ -87,8 +93,13 @@ class WSNameApplet(MatePanelApplet.Applet):
 
         actions = [("Prefs", Gtk.STOCK_PREFERENCES, "Preferences", None, None, self._display_prefs), 
                    ("About", Gtk.STOCK_ABOUT, "About", None, None, self._display_about)]
+        
         actiongroup = Gtk.ActionGroup.new("WsnameActions")
         actiongroup.add_actions(actions, None)
+
+        # Note: the above code gives a deprecation message. But fixing it would mess with the menu icons, which I don't want to lose.
+        #actiongroup = Gio.SimpleActionGroup()
+        #actiongroup.add_action_entries(actions, None)
         applet.setup_menu(menuxml, actiongroup)
         self.init()
 
@@ -96,7 +107,7 @@ class WSNameApplet(MatePanelApplet.Applet):
         about = Gtk.AboutDialog()
         about.set_program_name("Workspace Name Applet")
         about.set_version(wsnamelet_globals.version)
-        about.set_copyright("© 2006 - 2015 Alexandre Muñiz")
+        about.set_copyright("© 2006 - 2021 Alexandre Muñiz")
         about.set_comments("View and change the name of the current workspace.\n\nTo change the workspace name, click on the applet, type the new name, and press Enter.")
         about.set_website("https://github.com/munizao/mate-workspace-name-applet")
         about.connect ("response", lambda self, *args: self.destroy ())
@@ -146,7 +157,12 @@ class WSNameApplet(MatePanelApplet.Applet):
 
     def _on_button_press(self, button, event, data=None):
         if event.button != 1:
-            button.stop_emission("button-press-event")
+            # button.stop_emission("button-press-event")
+            button.stop_emission_by_name("button-press-event")
+        # if event.button != 1:
+        #     Gtk.propagate_event(self.applet, event)
+        #     return True
+        # return False
 
     def _on_button_release(self, button, event, data=None):
         if event.type == Gdk.EventType.BUTTON_RELEASE and event.button == 1:
@@ -157,7 +173,7 @@ class WSNameApplet(MatePanelApplet.Applet):
             self.entry.set_position(-1)            
             self.entry.select_region(0, -1)
             self.applet.request_focus(event.time)
-            GObject.timeout_add(0, self.entry.grab_focus)
+            GLib.timeout_add(0, self.entry.grab_focus)
             self.applet.show_all()
 
     def _on_entry_button_press(self, entry, event, data=None):
