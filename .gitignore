@@ -25,3 +25,5 @@ Makefile.in
 /stamp-h1
 /config.log
 /config.status
+debug.stdout
+debug.stderr
